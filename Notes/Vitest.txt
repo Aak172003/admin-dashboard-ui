@@ -1,0 +1,7 @@
+React Tsting Library 
+getBy -> throws an error if not able to find text and tag in component
+queryBy -> This means anything will remove from DOM After some time then use queryBy 
+
+Also this queryBy return Null if not find text and tag in component
+
+findBy -> Async (any element which we not get immediately )
