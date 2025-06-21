@@ -1,0 +1,5 @@
+Here we use Outlet for route protection , and we group router based on child and parent route 
+
+Also we group whole into 2 case 
+1. Logged-In User
+2. Non-Authorize User
