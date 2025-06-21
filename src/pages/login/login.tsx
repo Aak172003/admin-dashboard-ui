@@ -13,8 +13,9 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import Logo from "../../components/icons/logo";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import type { Credentials } from "../../types";
-import { login, self } from "../../http/api";
+import { login, logout, self } from "../../http/api";
 import { useAuthStore } from "../../store";
+import { usePermission } from "../../hooks/usePermission";
 
 const loginUser = async (credentials: Credentials) => {
   console.log("userData :::::::::::: ", credentials);
@@ -32,11 +33,16 @@ const getSelf = async () => {
 };
 
 const LoginPage = () => {
+  const { isAllowed } = usePermission();
+
   // Get Hooks from Zustand
-  const { setUser } = useAuthStore();
+  const { setUser, logout: logoutFromStore } = useAuthStore();
 
   // getself
-  const { data: selfData, refetch } = useQuery({
+  // const { data: selfData, refetch } = useQuery({
+
+  // Now we are using refetch to fetch the self data after login
+  const { refetch } = useQuery({
     queryKey: ["self"],
     queryFn: getSelf,
 
@@ -45,18 +51,43 @@ const LoginPage = () => {
     enabled: false,
   });
 
+  // Mutation for logout , so we can perform proper error handling
+  const { mutate: logoutMutate } = useMutation({
+    mutationKey: ["logout"],
+    mutationFn: logout,
+    onSuccess: () => {
+      // After logout success we are calling the logoutFromStore function to logout the user from the store
+      console.log("logout successfully");
+      logoutFromStore();
+      return;
+    },
+  });
+
   // isPending is used to show a loading spinner , it is true when the mutation is pending
   // isError is used to show an error message , it is true when the mutation is in error state
   const { mutate, isPending, isError, error } = useMutation({
     mutationKey: ["login"],
     mutationFn: loginUser,
     onSuccess: async () => {
+      // login success
       const selfDataPromise = await refetch();
-      console.log("selfDataPromise :::::::::::: ", selfDataPromise);
-      const selfData = selfDataPromise.data;
-      setUser(selfData);
-      console.log("selfData :::::::::::: ", selfData);
-      console.log("Login Successfully");
+
+      // Logout or redirect to client ui
+
+      // Do logout like this otherwise create a new mutation for logout
+      if (!isAllowed(selfDataPromise.data)) {
+        // Here we are calling the logout function from the api , because we make null state but now cookies are not null
+
+        // perform logout from mutation
+        // await logout();
+        logoutMutate(); // this will call the logout function from the api
+
+        // logoutFromStore is used to logout the user from the store
+        // logoutFromStore();
+        return;
+      }
+
+      setUser(selfDataPromise.data);
     },
   });
 
