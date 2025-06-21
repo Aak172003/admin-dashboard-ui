@@ -1,8 +1,40 @@
-import { Layout, Card, Space, Form, Input, Checkbox, Button, Flex } from "antd";
+import {
+  Layout,
+  Card,
+  Space,
+  Form,
+  Input,
+  Checkbox,
+  Button,
+  Flex,
+  Alert,
+} from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import Logo from "../../components/icons/logo";
+import { useMutation } from "@tanstack/react-query";
+import type { Credentials } from "../../types";
+import { login } from "../../http/api";
+
+const loginUser = async (credentials: Credentials) => {
+  console.log("userData :::::::::::: ", credentials);
+  // Server call logic
+
+  const { data } = await login(credentials);
+  console.log("response :::::::::::: ", data);
+  return data;
+};
 
 const LoginPage = () => {
+  // isPending is used to show a loading spinner , it is true when the mutation is pending
+  // isError is used to show an error message , it is true when the mutation is in error state
+  const { mutate, isPending, isError, error } = useMutation({
+    mutationKey: ["login"],
+    mutationFn: loginUser,
+    onSuccess: async () => {
+      console.log("Login Successfully");
+    },
+  });
+
   return (
     <>
       <Layout
@@ -37,7 +69,23 @@ const LoginPage = () => {
               </Space>
             }
           >
-            <Form initialValues={{ remember: true }}>
+            <Form
+              initialValues={{ remember: true }}
+              onFinish={(values) => {
+                console.log("onFinish");
+                console.log("values :::::::::::: ", values);
+                mutate({ email: values.username, password: values.password });
+              }}
+            >
+              {isError && (
+                <Alert
+                  style={{
+                    marginBottom: 24,
+                  }}
+                  message={error.message}
+                  type="error"
+                />
+              )}
               <Form.Item
                 name="username"
                 rules={[
@@ -81,6 +129,7 @@ const LoginPage = () => {
                   type="primary"
                   htmlType="submit"
                   style={{ width: "100%" }}
+                  loading={isPending}
                 >
                   Log in
                 </Button>
