@@ -6,7 +6,6 @@ import { useEffect } from "react";
 
 const getSelf = async () => {
   const { data } = await self();
-  console.log("response :::::::::::: ", data);
   return data;
 };
 
@@ -19,9 +18,8 @@ const Root = () => {
   });
 
   useEffect(() => {
-    console.log("data :::::::::::: ", data);
     if (data) {
-      setUser(data.data);
+      setUser(data);
     }
   }, [data, setUser]);
 
