@@ -27,8 +27,6 @@ export const useAuthStore = create<AuthState>()(
     // wrap all the code in devtools middleware , so we can access the store in redux devtools
     devtools((set) => ({
         user: null,
-
-
         setUser: (user) => set({ user: user }),
         logout: () => set({ user: null })
 
