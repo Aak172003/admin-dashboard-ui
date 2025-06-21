@@ -40,7 +40,6 @@ api.interceptors.response.use((response) => response, async (error) => {
             return api.request({ ...originalRequest, headers })
 
         } catch (error) {
-            console.log("Token Refresh Error :::::::::::: ", error);
             // This will logout the user and clear the store
             useAuthStore.getState().logout();
             return Promise.reject(error);
