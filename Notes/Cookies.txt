@@ -1,0 +1,8 @@
+If any thing get in cookies like accessToken or refreshToken and it have httponly option tick (enable) 
+which means our frontend application can be able to access that token from the cookies 
+
+
+There is one option -> we stored tokens not in cookies , we are going to store in localStorage 
+But there is problem here , if we store anything in localstorage , so anyone can theift the data to run script 
+
+Script was like -> get value from localastorage (localstorage.getItem("key"))
