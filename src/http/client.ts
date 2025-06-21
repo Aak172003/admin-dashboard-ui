@@ -37,6 +37,8 @@ api.interceptors.response.use((response) => response, async (error) => {
             originalRequest._isRetry = true;
             const headers = { ...originalRequest.headers }
             await refreshToken();
+
+            // Here we want to send the original request again with the new token
             return api.request({ ...originalRequest, headers })
 
         } catch (error) {
