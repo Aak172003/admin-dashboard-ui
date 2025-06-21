@@ -9,7 +9,10 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <Dashboard />,
+
+    // These are called protected routes -> And route protection logic is written in Dashboard component
     children: [
+      // This will be the default route
       {
         path: "",
         element: <HomePage />,
@@ -21,6 +24,8 @@ export const router = createBrowserRouter([
   {
     path: "/auth",
     element: <NonAuthorize />,
+
+    // These are called public routes
     children: [
       {
         path: "login",

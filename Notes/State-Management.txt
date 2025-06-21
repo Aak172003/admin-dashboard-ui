@@ -1,0 +1,2 @@
+Redux and Zustand -> their data is stored in memory storage
+when we refresh the page, it clears all the data that was stored in it
