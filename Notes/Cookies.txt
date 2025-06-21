@@ -1,7 +1,9 @@
-If anything gets stored in cookies like accessToken or refreshToken and it has the HttpOnly option enabled,
-this means our frontend application cannot access those tokens from the cookies.
+When tokens like accessToken or refreshToken are stored in cookies with the HttpOnly option enabled,
+the frontend application cannot access these tokens from the cookies.
 
-There is one alternative option -> we can store tokens not in cookies, but in localStorage instead.
-But there is a problem here: if we store anything in localStorage, anyone can steal the data by running a script.
+One alternative is to store tokens in localStorage instead of cookies.
+However, there is a security problem: if we store data in localStorage, anyone can steal it by running a script.
 
-The script would be like -> get value from localStorage (localStorage.getItem("key"))
+The script would look like this: get value from localStorage (localStorage.getItem("key"))
+
+If we store tokens in cookies, they are automatically sent with every request from the frontend.

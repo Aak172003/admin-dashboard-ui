@@ -11,9 +11,10 @@ import {
 } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import Logo from "../../components/icons/logo";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type { Credentials } from "../../types";
-import { login } from "../../http/api";
+import { login, self } from "../../http/api";
+import { useAuthStore } from "../../store";
 
 const loginUser = async (credentials: Credentials) => {
   console.log("userData :::::::::::: ", credentials);
@@ -24,13 +25,37 @@ const loginUser = async (credentials: Credentials) => {
   return data;
 };
 
+const getSelf = async () => {
+  const { data } = await self();
+  console.log("response :::::::::::: ", data);
+  return data;
+};
+
 const LoginPage = () => {
+  // Get Hooks from Zustand
+  const { setUser } = useAuthStore();
+
+  // getself
+  const { data: selfData, refetch } = useQuery({
+    queryKey: ["self"],
+    queryFn: getSelf,
+
+    // This key is set to false which means
+    // after component renders this gets executed but we want this to execute after getting successful response from login endpoint
+    enabled: false,
+  });
+
   // isPending is used to show a loading spinner , it is true when the mutation is pending
   // isError is used to show an error message , it is true when the mutation is in error state
   const { mutate, isPending, isError, error } = useMutation({
     mutationKey: ["login"],
     mutationFn: loginUser,
     onSuccess: async () => {
+      const selfDataPromise = await refetch();
+      console.log("selfDataPromise :::::::::::: ", selfDataPromise);
+      const selfData = selfDataPromise.data;
+      setUser(selfData);
+      console.log("selfData :::::::::::: ", selfData);
       console.log("Login Successfully");
     },
   });
