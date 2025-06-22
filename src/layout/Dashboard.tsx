@@ -22,6 +22,7 @@ import HomeIcon from "../assets/sideDashBoard/home";
 import RestaurantsIcon from "../assets/sideDashBoard/restaurants";
 import { useMutation } from "@tanstack/react-query";
 import { logout } from "../http/api";
+import { useLogout } from "../hooks/useLogout";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -60,19 +61,7 @@ const items = [
 ];
 
 const Dashboard = () => {
-  const { logout: logoutFromStore } = useAuthStore();
-
-  // Mutation for logout , so we can perform proper error handling
-  const { mutate: logoutMutate } = useMutation({
-    mutationKey: ["logout"],
-    mutationFn: logout,
-    onSuccess: () => {
-      // After logout success we are calling the logoutFromStore function to logout the user from the store
-      console.log("logout successfully");
-      logoutFromStore();
-      return;
-    },
-  });
+  const { logoutMutate } = useLogout();
 
   const { user } = useAuthStore();
   const [collapsed, setCollapsed] = useState(false);
