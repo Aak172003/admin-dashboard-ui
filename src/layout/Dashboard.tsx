@@ -10,7 +10,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      <h1>Dashboard Component</h1>
+      {/* <h1>Dashboard Component</h1> */}
       <Link to="/auth/login">Login</Link>
       {/* Outlet is used to render the child component based on the route */}
       <Outlet />

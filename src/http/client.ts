@@ -1,5 +1,7 @@
 import axios from "axios";
 import { ENDPOINT_REFRESH_TOKEN } from "../text";
+// import { refreshToken } from "./api";
+// import { ENDPOINT_REFRESH_TOKEN } from "../text";
 
 import { useAuthStore } from "../store";
 
@@ -17,35 +19,45 @@ export const api = axios.create({
     },
 });
 
-// const refreshToken = () => api.get(ENDPOINT_REFRESH_TOKEN)
 
+// const refreshToken = () => api.post(ENDPOINT_REFRESH_TOKEN)
 
 const refreshToken = async () => {
-    await api.post(`${import.meta.env.VITE_BACKEND_API_URL}${ENDPOINT_REFRESH_TOKEN}`, {}, { withCredentials: true })
+    await axios.post(`${import.meta.env.VITE_BACKEND_API_URL}/auth/refresh`, {}, {
+        withCredentials: true
+    })
+
 }
 
-api.interceptors.response.use((response) => response, async (error) => {
+// Axios provide interceptors , which are used to intercept the request and response
 
-    // This is the original request that was made , to get response from server , but it got error
-    const originalRequest = error.config;
-    console.log("originalRequest :::::::::::: ", originalRequest);
+api.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+        const originalRequest = error.config;
 
-    // This is used to prevent infinite loop of refreshing tokens when any API sends a request and gets a 401 error again
-    // To prevent this, we are using this flag
-    if (error.response.status === 401 && !originalRequest._isRetry) {
-        try {
-            originalRequest._isRetry = true;
-            const headers = { ...originalRequest.headers }
-            await refreshToken();
+        console.log("originalRequest :::::::::::: ", originalRequest);
 
-            // Here we want to send the original request again with the new token
-            return api.request({ ...originalRequest, headers })
+        // This is used to prevent infinite loop of refreshing tokens when any API sends a request and gets a 401 error again
+        // To prevent this, we are using this flag
+        if (error.response?.status === 401 && !originalRequest._isRetry) {
+            try {
 
-        } catch (error) {
-            // This will logout the user and clear the store
-            useAuthStore.getState().logout();
-            return Promise.reject(error);
+                originalRequest._isRetry = true;
+
+                const headers = { ...originalRequest.headers }
+                await refreshToken()
+                return api.request({ ...originalRequest, headers })
+
+            } catch (error) {
+                console.log("Refresh Token Error :::::::::::: ", error);
+
+                // Call as a Hook
+                useAuthStore.getState().logout();
+                return Promise.reject(error);
+            }
         }
+
+        return Promise.reject(error);
     }
-    return Promise.reject(error);
-})
+)
