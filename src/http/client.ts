@@ -1,8 +1,4 @@
 import axios from "axios";
-import { ENDPOINT_REFRESH_TOKEN } from "../text";
-// import { refreshToken } from "./api";
-// import { ENDPOINT_REFRESH_TOKEN } from "../text";
-
 import { useAuthStore } from "../store";
 
 export const api = axios.create({
