@@ -16,6 +16,7 @@ import type { Credentials } from "../../types";
 import { login, logout, self } from "../../http/api";
 import { useAuthStore } from "../../store";
 import { usePermission } from "../../hooks/usePermission";
+import { useLogout } from "../../hooks/useLogout";
 
 const loginUser = async (credentials: Credentials) => {
   console.log("userData :::::::::::: ", credentials);
@@ -33,10 +34,13 @@ const getSelf = async () => {
 };
 
 const LoginPage = () => {
+  // usePermission hook is used to check if the user has the permission to access the page
   const { isAllowed } = usePermission();
+  // useLogout hook is used to logout the user from the store
+  const { logoutMutate } = useLogout();
 
   // Get Hooks from Zustand
-  const { setUser, logout: logoutFromStore } = useAuthStore();
+  const { setUser } = useAuthStore();
 
   // getself
   // const { data: selfData, refetch } = useQuery({
@@ -49,18 +53,6 @@ const LoginPage = () => {
     // This key is set to false which means
     // after component renders this gets executed but we want this to execute after getting successful response from login endpoint
     enabled: false,
-  });
-
-  // Mutation for logout , so we can perform proper error handling
-  const { mutate: logoutMutate } = useMutation({
-    mutationKey: ["logout"],
-    mutationFn: logout,
-    onSuccess: () => {
-      // After logout success we are calling the logoutFromStore function to logout the user from the store
-      console.log("logout successfully");
-      logoutFromStore();
-      return;
-    },
   });
 
   // isPending is used to show a loading spinner , it is true when the mutation is pending
