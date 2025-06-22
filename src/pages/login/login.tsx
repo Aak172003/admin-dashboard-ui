@@ -10,7 +10,7 @@ import {
   Alert,
 } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import Logo from "../../components/icons/logo";
+import Logo from "../../assets/icons/logo";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import type { Credentials } from "../../types";
 import { login, logout, self } from "../../http/api";
