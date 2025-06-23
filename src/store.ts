@@ -3,12 +3,19 @@ import { create } from "zustand";
 // This is a middleware that will be used to redux devtools the store
 import { devtools } from 'zustand/middleware'
 
+
+export interface Tenant {
+    id: number;
+    name: string;
+    address: string;
+}
 export interface User {
     id: string;
     firstName: string;
     lastName: string;
     email: string;
     role: string;
+    tenant: Tenant
 }
 
 export interface AuthState {

@@ -20,8 +20,6 @@ import Icon, {
 import Logo from "../assets/icons/logo";
 import HomeIcon from "../assets/sideDashBoard/home";
 import RestaurantsIcon from "../assets/sideDashBoard/restaurants";
-import { useMutation } from "@tanstack/react-query";
-import { logout } from "../http/api";
 import { useLogout } from "../hooks/useLogout";
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -108,7 +106,10 @@ const Dashboard = () => {
             }}
           >
             <Flex gap="middle" align="center" justify="space-between">
-              <Badge text="Admin" status="success" />
+              <Badge
+                text={user.role === "admin" ? "You are an admin" : user.tenant.name}
+                status="success"
+              />
 
               <Space size={16}>
                 <Badge dot={true}>
