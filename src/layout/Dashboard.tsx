@@ -107,7 +107,10 @@ const Dashboard = () => {
           >
             <Flex gap="middle" align="center" justify="space-between">
               <Badge
-                text={user.role === "admin" ? "You are an admin" : user.tenant.name}
+                text={
+                  // here tenant is optional so we need to check if it is defined
+                  user.role === "admin" ? "You are an admin" : user.tenant?.name
+                }
                 status="success"
               />
 
