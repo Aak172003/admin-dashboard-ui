@@ -147,7 +147,7 @@ const Dashboard = () => {
           </Header>
 
           {/* Content is used to display the content */}
-          <Content style={{ margin: "0 16px" }}>
+          <Content style={{ margin: "24px" }}>
             {/* Outlet is used to render the child component based on the route */}
             <Outlet />
           </Content>
