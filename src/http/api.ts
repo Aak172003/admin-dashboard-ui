@@ -1,4 +1,4 @@
-import { ENDPOINT_LOGIN, ENDPOINT_LOGOUT, ENDPOINT_REFRESH_TOKEN, ENDPOINT_SELF } from "../text";
+import { ENDPOINT_LOGIN, ENDPOINT_LOGOUT, ENDPOINT_REFRESH_TOKEN, ENDPOINT_SELF, ENDPOINT_USERS } from "../text";
 import type { Credentials } from "../types";
 import { api } from "./client";
 
@@ -10,3 +10,5 @@ export const self = () => api.get(ENDPOINT_SELF)
 export const logout = () => api.post(ENDPOINT_LOGOUT)
 
 export const refreshToken = () => api.post(ENDPOINT_REFRESH_TOKEN)
+
+export const getUsers = () => api.get(ENDPOINT_USERS)
