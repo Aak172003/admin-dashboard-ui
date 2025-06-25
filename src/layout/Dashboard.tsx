@@ -24,39 +24,108 @@ import { useLogout } from "../hooks/useLogout";
 
 const { Header, Content, Footer, Sider } = Layout;
 
-const items = [
-  {
-    key: "/",
-    icon: <Icon component={HomeIcon} />,
-    label: <NavLink to="/">Home</NavLink>,
-  },
-  {
-    key: "/users",
-    icon: <UserOutlined />,
-    label: <NavLink to="/users">Users</NavLink>,
-  },
+const getMenuItems = (role: string) => {
 
-  {
-    key: "/restaurants",
-    icon: <Icon component={RestaurantsIcon} />,
-    label: <NavLink to="/restaurants">Restaurants</NavLink>,
-  },
 
-  {
-    key: "/products",
-    icon: <ShoppingCartOutlined />,
-    label: <NavLink to="/products">Products</NavLink>,
-  },
-  {
-    key: "/promos",
-    icon: <GiftOutlined />,
-    label: <NavLink to="/promos">Promos</NavLink>,
-  },
+  // If we want to make sort these menu items in another form , so we can just put priority on every object , just before return we just sort based on priority 
+  
+  const baseItems = [
+    {
+      key: "/",
+      icon: <Icon component={HomeIcon} />,
+      label: <NavLink to="/">Home</NavLink>,
+    },
+    // {
+    //   key: "/users",
+    //   icon: <UserOutlined />,
+    //   label: <NavLink to="/users">Users</NavLink>,
+    // },
 
-  {
-    key: "/settings",
-  },
-];
+    {
+      key: "/restaurants",
+      icon: <Icon component={RestaurantsIcon} />,
+      label: <NavLink to="/restaurants">Restaurants</NavLink>,
+    },
+
+    {
+      key: "/products",
+      icon: <ShoppingCartOutlined />,
+      label: <NavLink to="/products">Products</NavLink>,
+    },
+    {
+      key: "/promos",
+      icon: <GiftOutlined />,
+      label: <NavLink to="/promos">Promos</NavLink>,
+    },
+  ];
+
+  // if (role === "admin") {
+  //   return [
+  //     ...baseItems,
+  //     {
+  //       key: "/users",
+  //       icon: <UserOutlined />,
+  //       label: <NavLink to="/users">Users</NavLink>,
+  //     },
+  //   ];
+  // }
+
+  // How we can put in particular postion
+  if (role === "admin") {
+    const menu = [...baseItems];
+    // This will modify existing array and add new item at index 1
+    // 1 is the index where we want to add the new item
+    // 0 is the number of items to remove
+    // {
+    //   key: "/users",
+    //   icon: <UserOutlined />,
+    //   label: <NavLink to="/users">Users</NavLink>,
+    // } is the new item to add
+    menu.splice(1, 0, {
+      key: "/users",
+      icon: <UserOutlined />,
+      label: <NavLink to="/users">Users</NavLink>,
+    });
+
+    return menu;
+  }
+
+  return baseItems;
+};
+
+// const items = [
+//   {
+//     key: "/",
+//     icon: <Icon component={HomeIcon} />,
+//     label: <NavLink to="/">Home</NavLink>,
+//   },
+//   {
+//     key: "/users",
+//     icon: <UserOutlined />,
+//     label: <NavLink to="/users">Users</NavLink>,
+//   },
+
+//   {
+//     key: "/restaurants",
+//     icon: <Icon component={RestaurantsIcon} />,
+//     label: <NavLink to="/restaurants">Restaurants</NavLink>,
+//   },
+
+//   {
+//     key: "/products",
+//     icon: <ShoppingCartOutlined />,
+//     label: <NavLink to="/products">Products</NavLink>,
+//   },
+//   {
+//     key: "/promos",
+//     icon: <GiftOutlined />,
+//     label: <NavLink to="/promos">Promos</NavLink>,
+//   },
+
+//   {
+//     key: "/settings",
+//   },
+// ];
 
 const Dashboard = () => {
   const { logoutMutate } = useLogout();
@@ -73,6 +142,11 @@ const Dashboard = () => {
   if (user === null) {
     return <Navigate to="/auth/login" replace={true} />;
   }
+
+  // Get the menu items based on the role of the user , also in above we just check user not to be null
+  const items = getMenuItems(user.role);
+
+  console.log("items ::::::::::::::: ", items);
 
   return (
     <div>
