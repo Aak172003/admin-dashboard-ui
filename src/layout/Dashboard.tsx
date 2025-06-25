@@ -93,39 +93,6 @@ const getMenuItems = (role: string) => {
   return baseItems;
 };
 
-// const items = [
-//   {
-//     key: "/",
-//     icon: <Icon component={HomeIcon} />,
-//     label: <NavLink to="/">Home</NavLink>,
-//   },
-//   {
-//     key: "/users",
-//     icon: <UserOutlined />,
-//     label: <NavLink to="/users">Users</NavLink>,
-//   },
-
-//   {
-//     key: "/restaurants",
-//     icon: <Icon component={RestaurantsIcon} />,
-//     label: <NavLink to="/restaurants">Restaurants</NavLink>,
-//   },
-
-//   {
-//     key: "/products",
-//     icon: <ShoppingCartOutlined />,
-//     label: <NavLink to="/products">Products</NavLink>,
-//   },
-//   {
-//     key: "/promos",
-//     icon: <GiftOutlined />,
-//     label: <NavLink to="/promos">Promos</NavLink>,
-//   },
-
-//   {
-//     key: "/settings",
-//   },
-// ];
 
 const Dashboard = () => {
   const { logoutMutate } = useLogout();
