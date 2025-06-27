@@ -1,5 +1,5 @@
 import { ENDPOINT_LOGIN, ENDPOINT_LOGOUT, ENDPOINT_REFRESH_TOKEN, ENDPOINT_SELF, ENDPOINT_TENANTS, ENDPOINT_USERS } from "../text";
-import type { Credentials } from "../types";
+import type { CreateUser, Credentials, UserData } from "../types";
 import { api } from "./client";
 
 // Auth Service
@@ -15,3 +15,5 @@ export const getUsers = () => api.get(ENDPOINT_USERS)
 
 export const getTenants = () => api.get(ENDPOINT_TENANTS)
 
+
+export const createUser = (user: CreateUser) => api.post(ENDPOINT_USERS, user)

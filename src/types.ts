@@ -13,6 +13,15 @@ export type UserData = {
     createdAt: string;
 };
 
+export type CreateUser = {
+    firstName: string;
+    lastName: string;
+    password: string;
+    email: string;
+    role: string;
+    tenantId: number;
+}
+
 export type TenantData = {
     id: number;
     name: string;
