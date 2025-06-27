@@ -4,11 +4,10 @@ import LoginPage from "./pages/login/login";
 import Dashboard from "./layout/Dashboard";
 import NonAuthorize from "./layout/NonAuthorize";
 import Root from "./layout/Root";
-import User from "./pages/users/user";
-import Restaurants from "./pages/restaurants/restaurants";
+import Tenants from "./pages/restaurants/tenants";
 import Products from "./pages/products/products";
 import Promos from "./pages/promos/promos";
-
+import User from "./pages/users/user";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -34,7 +33,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "restaurants",
-            element: <Restaurants />,
+            element: <Tenants />,
           },
           {
             path: "products",

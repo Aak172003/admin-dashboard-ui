@@ -4,11 +4,11 @@ import { Link, Navigate } from "react-router-dom";
 import { PlusOutlined, RightOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { getUsers } from "../../http/api";
-import type { User } from "../../types";
 import { useAuthStore } from "../../store";
 import UserFilter from "./userFilter";
 import { useState } from "react";
 import UserForm from "./forms/userForm";
+import type { UserData } from "../../types";
 
 const columns = [
   {
@@ -22,7 +22,7 @@ const columns = [
     key: "firstName",
     // _text -> This means that we are not using the text parameter
     // This is how we gtoup multiple column data into one column
-    render: (_text: string, record: User) => {
+    render: (_text: string, record: UserData) => {
       return (
         <div>
           {record.firstName} {record.lastName}
