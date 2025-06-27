@@ -1,5 +1,4 @@
-import { Button, Card, Col, Input, Row, Select } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { Card, Col, Input, Row, Select } from "antd";
 
 type UserFilterProps = {
   onFilterChange: (filterName: string, filterValue: string) => void;

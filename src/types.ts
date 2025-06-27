@@ -4,7 +4,7 @@ export type Credentials = {
 };
 
 
-export type User = {
+export type UserData = {
     id: number;
     firstName: string;
     lastName: string;
@@ -13,5 +13,10 @@ export type User = {
     createdAt: string;
 };
 
+export type TenantData = {
+    id: number;
+    name: string;
+    address: string;
+};
 
 
