@@ -26,10 +26,11 @@ import {
 import { createUser, getUsers } from "../../http/api";
 import { useAuthStore } from "../../store";
 import UserFilter from "./userFilter";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import UserForm from "./forms/userForm";
 import type { CreateUser, FieldData, UserData } from "../../types";
 import { PER_PAGE } from "../../constants";
+import { debounce } from "lodash";
 
 const columns = [
   {
@@ -124,6 +125,16 @@ const User = () => {
 
   const { user } = useAuthStore();
 
+  const debounceQUpdate = useMemo(() => {
+    return debounce((value: string | undefined) => {
+      if (!value) return;
+      setQueryParams((prev) => ({
+        ...prev,
+        q: value,
+      }));
+    }, 5000);
+  }, []);
+
   const onFilterChange = (changedFields: FieldData[]) => {
     console.log("changedFields", changedFields);
 
@@ -137,12 +148,17 @@ const User = () => {
 
     console.log("changeFields", changeFilterFields);
 
-    setQueryParams((prev) => {
-      return {
+    if ("q" in changeFilterFields) {
+      // Implement the debounce logic here
+      // We will use the debounce function to delay the execution of the function , which is provided by loadash
+      console.log("debounceQUpdate", changeFilterFields.q);
+      debounceQUpdate(changeFilterFields.q);
+    } else {
+      setQueryParams((prev) => ({
         ...prev,
         ...changeFilterFields,
-      };
-    });
+      }));
+    }
   };
 
   if (user?.role !== "admin") {
