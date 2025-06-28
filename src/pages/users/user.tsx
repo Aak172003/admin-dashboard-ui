@@ -74,6 +74,8 @@ const User = () => {
   } = useQuery({
     queryKey: ["users", queryParams],
     queryFn: async () => {
+      // Here we are converting the queryParams to a query string
+      // like this currentPage=1&perPage=10
       const queryString = new URLSearchParams(
         queryParams as unknown as Record<string, string>
       ).toString();
@@ -152,7 +154,7 @@ const User = () => {
               //   currentPage: page,
               //   perPage: pageSize || PER_PAGE,
               // });
-
+              // This is used to update the queryParams , with persisting the previous values
               setQueryParams((prev) => {
                 return {
                   ...prev,
