@@ -28,7 +28,7 @@ import { useAuthStore } from "../../store";
 import UserFilter from "./userFilter";
 import { useState } from "react";
 import UserForm from "./forms/userForm";
-import type { CreateUser, UserData } from "../../types";
+import type { CreateUser, FieldData, UserData } from "../../types";
 import { PER_PAGE } from "../../constants";
 
 const columns = [
@@ -73,6 +73,8 @@ const columns = [
 
 const User = () => {
   const [form] = Form.useForm();
+  const [filterForm] = Form.useForm();
+
   const queryClient = useQueryClient();
 
   // This is used to get the theme of the application
@@ -95,10 +97,18 @@ const User = () => {
   } = useQuery({
     queryKey: ["users", queryParams],
     queryFn: async () => {
+      // This is used to filter the queryParams , so that we dont send the undefined values to the server
+      // Means we are not sending the undefined values to the server
+
+      const filteredParams = Object.fromEntries(
+        Object.entries(queryParams).filter((item) => !!item[1])
+      );
       // Here we are converting the queryParams to a query string
       // like this currentPage=1&perPage=10
       const queryString = new URLSearchParams(
-        queryParams as unknown as Record<string, string>
+        // queryParams as unknown as Record<string, string>
+
+        filteredParams as unknown as Record<string, string>
       ).toString();
       console.log("queryString", queryString);
       const res = await getUsers(queryString);
@@ -113,6 +123,27 @@ const User = () => {
   });
 
   const { user } = useAuthStore();
+
+  const onFilterChange = (changedFields: FieldData[]) => {
+    console.log("changedFields", changedFields);
+
+    const changeFilterFields = changedFields
+      .map((item) => {
+        return {
+          [item.name[0]]: item.value,
+        };
+      })
+      .reduce((acc, curr) => ({ ...acc, ...curr }), {});
+
+    console.log("changeFields", changeFilterFields);
+
+    setQueryParams((prev) => {
+      return {
+        ...prev,
+        ...changeFilterFields,
+      };
+    });
+  };
 
   if (user?.role !== "admin") {
     return <Navigate to="/" replace={true} />;
@@ -160,21 +191,23 @@ const User = () => {
           )}
         </Flex>
 
-        <UserFilter
-          onFilterChange={(filterName: string, filterValue: string) => {
-            console.log(filterName, filterValue);
-          }}
-        >
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            onClick={() => {
-              setIsDrawerOpen(true);
-            }}
+        <Form form={filterForm} onFieldsChange={onFilterChange}>
+          <UserFilter
+          // onFilterChange={(filterName: string, filterValue: string) => {
+          //   console.log(filterName, filterValue);
+          // }}
           >
-            Add User
-          </Button>
-        </UserFilter>
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={() => {
+                setIsDrawerOpen(true);
+              }}
+            >
+              Add User
+            </Button>
+          </UserFilter>
+        </Form>
 
         <Table
           columns={columns}
