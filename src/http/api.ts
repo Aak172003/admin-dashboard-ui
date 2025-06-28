@@ -11,7 +11,7 @@ export const logout = () => api.post(ENDPOINT_LOGOUT)
 
 export const refreshToken = () => api.post(ENDPOINT_REFRESH_TOKEN)
 
-export const getUsers = () => api.get(ENDPOINT_USERS)
+export const getUsers = (queryString: string) => api.get(`${ENDPOINT_USERS}?${queryString}`)
 
 export const getTenants = () => api.get(ENDPOINT_TENANTS)
 

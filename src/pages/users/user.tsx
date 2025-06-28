@@ -9,6 +9,7 @@ import UserFilter from "./userFilter";
 import { useState } from "react";
 import UserForm from "./forms/userForm";
 import type { CreateUser, UserData } from "../../types";
+import { PER_PAGE } from "../../constants";
 
 const columns = [
   {
@@ -59,6 +60,10 @@ const User = () => {
     token: { colorBgLayout },
   } = theme.useToken();
 
+  const [queryParams, setQueryParams] = useState({
+    currentPage: 1,
+    perPage: PER_PAGE,
+  });
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const {
@@ -67,9 +72,16 @@ const User = () => {
     isError,
     error,
   } = useQuery({
-    queryKey: ["users"],
+    queryKey: ["users", queryParams],
     queryFn: async () => {
-      const res = await getUsers();
+      // Here we are converting the queryParams to a query string
+      // like this currentPage=1&perPage=10
+      const queryString = new URLSearchParams(
+        queryParams as unknown as Record<string, string>
+      ).toString();
+      console.log("queryString", queryString);
+      const res = await getUsers(queryString);
+
       return res.data;
     },
   });
@@ -125,7 +137,34 @@ const User = () => {
           </Button>
         </UserFilter>
 
-        <Table columns={columns} dataSource={users} rowKey={"id"} />
+        <Table
+          columns={columns}
+          dataSource={users?.data}
+          rowKey={"id"}
+          pagination={{
+            total: users?.total,
+            current: queryParams.currentPage,
+            pageSize: queryParams.perPage,
+
+            onChange: (page, pageSize) => {
+              console.log("page", page);
+              console.log("pageSize", pageSize);
+
+              // setQueryParams({
+              //   currentPage: page,
+              //   perPage: pageSize || PER_PAGE,
+              // });
+              // This is used to update the queryParams , with persisting the previous values
+              setQueryParams((prev) => {
+                return {
+                  ...prev,
+                  currentPage: page,
+                  // perPage: pageSize || PER_PAGE,
+                };
+              });
+            },
+          }}
+        />
 
         <Drawer
           title="Create User"
