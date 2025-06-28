@@ -29,3 +29,10 @@ export type TenantData = {
 };
 
 
+export type FieldData = {
+    name: string;
+    value?: string;
+}
+
+
+

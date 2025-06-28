@@ -1,5 +1,5 @@
 import { ENDPOINT_LOGIN, ENDPOINT_LOGOUT, ENDPOINT_REFRESH_TOKEN, ENDPOINT_SELF, ENDPOINT_TENANTS, ENDPOINT_USERS } from "../text";
-import type { CreateUser, Credentials, UserData } from "../types";
+import type { CreateUser, Credentials } from "../types";
 import { api } from "./client";
 
 // Auth Service
