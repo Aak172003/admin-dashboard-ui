@@ -1,8 +1,28 @@
-import { Breadcrumb, Button, Drawer, Form, Space, Table, theme } from "antd";
+import {
+  Breadcrumb,
+  Button,
+  Drawer,
+  Flex,
+  Form,
+  Space,
+  Spin,
+  Table,
+  theme,
+  Typography,
+} from "antd";
 import { Link, Navigate } from "react-router-dom";
 
-import { PlusOutlined, RightOutlined } from "@ant-design/icons";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  LoadingOutlined,
+  PlusOutlined,
+  RightOutlined,
+} from "@ant-design/icons";
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { createUser, getUsers } from "../../http/api";
 import { useAuthStore } from "../../store";
 import UserFilter from "./userFilter";
@@ -68,7 +88,8 @@ const User = () => {
 
   const {
     data: users,
-    isLoading,
+    // isLoading,
+    isFetching,
     isError,
     error,
   } = useQuery({
@@ -84,6 +105,11 @@ const User = () => {
 
       return res.data;
     },
+    // This is used to keep the previous data when the user is navigating back and forth
+    // It hold and show the previous data when the user is navigating back and forth
+    // If get the data from the server , it will not show the previous data , it will show the new data
+    // If we use this , so we dont have loading state when we are navigating back and forth , but we get the isFetching state
+    placeholderData: keepPreviousData,
   });
 
   const { user } = useAuthStore();
@@ -113,13 +139,26 @@ const User = () => {
   return (
     <>
       <Space direction="vertical" size="large" style={{ width: "100%" }}>
-        <Breadcrumb
-          separator={<RightOutlined />}
-          items={[{ title: <Link to="/">Dashboard</Link> }, { title: "Users" }]}
-        />
+        <Flex justify="space-between">
+          <Breadcrumb
+            separator={<RightOutlined />}
+            items={[
+              { title: <Link to="/">Dashboard</Link> },
+              { title: "Users" },
+            ]}
+          />
 
-        {isLoading && <div>Loading...</div>}
-        {isError && <div>Error: {error.message}</div>}
+          {isFetching && (
+            <Spin
+              indicator={
+                <LoadingOutlined style={{ fontSize: 24, color: "red" }} />
+              }
+            />
+          )}
+          {isError && (
+            <Typography.Text type="danger">{error.message}</Typography.Text>
+          )}
+        </Flex>
 
         <UserFilter
           onFilterChange={(filterName: string, filterValue: string) => {
