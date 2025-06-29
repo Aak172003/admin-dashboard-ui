@@ -70,6 +70,18 @@ const columns = [
     dataIndex: "role",
     key: "role",
   },
+  {
+    title: "Tenant",
+    dataIndex: "tenant",
+    key: "tenant",
+    render: (_text: string, record: UserData) => {
+      return (
+        <div>
+          {record?.tenant?.name} {record?.tenant?.address}
+        </div>
+      );
+    },
+  },
 ];
 
 const User = () => {
@@ -132,7 +144,7 @@ const User = () => {
         ...prev,
         q: value,
       }));
-    }, 5000);
+    }, 20000);
   }, []);
 
   const onFilterChange = (changedFields: FieldData[]) => {
