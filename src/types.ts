@@ -11,6 +11,7 @@ export type UserData = {
     email: string;
     role: string;
     createdAt: string;
+    tenant: TenantData | null;
 };
 
 export type CreateUser = {
