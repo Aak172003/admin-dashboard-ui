@@ -135,6 +135,9 @@ const User = () => {
     placeholderData: keepPreviousData,
   });
 
+
+  console.log("users data fetched", users);
+
   const { user } = useAuthStore();
 
   const debounceQUpdate = useMemo(() => {
@@ -143,8 +146,9 @@ const User = () => {
       setQueryParams((prev) => ({
         ...prev,
         q: value,
+        currentPage: 1,
       }));
-    }, 20000);
+    }, 500);
   }, []);
 
   const onFilterChange = (changedFields: FieldData[]) => {
@@ -169,6 +173,7 @@ const User = () => {
       setQueryParams((prev) => ({
         ...prev,
         ...changeFilterFields,
+        currentPage: 1,
       }));
     }
   };

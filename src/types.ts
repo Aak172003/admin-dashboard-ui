@@ -23,6 +23,11 @@ export type CreateUser = {
     tenantId: number;
 }
 
+export type CreateTenant = {
+    name: string;
+    address: string;
+}
+
 export type TenantData = {
     id: number;
     name: string;
