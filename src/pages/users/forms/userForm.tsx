@@ -1,16 +1,21 @@
 import { Card, Col, Form, Input, Row, Select, Space } from "antd";
-// import { getTenants } from "../../../http/api";
-// import { useQuery } from "@tanstack/react-query";
-// import type { TenantData } from "../../../types";
+import { getTenants } from "../../../http/api";
+import { useQuery } from "@tanstack/react-query";
+import type { TenantData } from "../../../types";
 
 const UserForm = () => {
-  // const { data: tenants } = useQuery({
-  //   queryKey: ["tenants"],
-  //   queryFn: async () => {
-  //     // const res = await getTenants();
-  //     // return res.data;
-  //   },
-  // });
+  const { data: tenants } = useQuery({
+    queryKey: ["tenants"],
+    // queryFn: async () => {
+    //   const res = await getTenants();
+    //   return res.data;
+    // },
+
+    queryFn: () => {
+      // TODO: make this dynamic, like search for tenants in the input
+      return getTenants(`perPage=100&currentPage=1`).then((res) => res.data);
+    },
+  });
 
   return (
     <Row>
@@ -110,11 +115,11 @@ const UserForm = () => {
                     placeholder="Select Restaurant"
                     onChange={() => {}}
                   >
-                    {/* {tenants?.map((tenant: TenantData) => (
+                    {tenants?.data?.map((tenant: TenantData) => (
                       <Select.Option key={tenant.id} value={tenant.id}>
                         {tenant.name}
                       </Select.Option>
-                    ))} */}
+                    ))}
                   </Select>
                 </Form.Item>
               </Col>
