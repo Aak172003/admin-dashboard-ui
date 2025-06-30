@@ -1,16 +1,16 @@
 import { Card, Col, Form, Input, Row, Select, Space } from "antd";
 // import { getTenants } from "../../../http/api";
-import { useQuery } from "@tanstack/react-query";
-import type { TenantData } from "../../../types";
+// import { useQuery } from "@tanstack/react-query";
+// import type { TenantData } from "../../../types";
 
 const UserForm = () => {
-  const { data: tenants } = useQuery({
-    queryKey: ["tenants"],
-    queryFn: async () => {
-      // const res = await getTenants();
-      // return res.data;
-    },
-  });
+  // const { data: tenants } = useQuery({
+  //   queryKey: ["tenants"],
+  //   queryFn: async () => {
+  //     // const res = await getTenants();
+  //     // return res.data;
+  //   },
+  // });
 
   return (
     <Row>
