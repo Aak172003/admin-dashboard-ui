@@ -1,11 +1,15 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuthStore } from "../store";
 
 const NonAuthorize = () => {
+  const location = useLocation();
   const { user } = useAuthStore();
 
   if (user !== null) {
-    return <Navigate to="/" replace={true} />;
+    console.log("location", location);
+    const returnTo = new URLSearchParams(location.search).get("returnTo");
+
+    return <Navigate to={returnTo || "/"} replace={true} />;
   }
 
   return (

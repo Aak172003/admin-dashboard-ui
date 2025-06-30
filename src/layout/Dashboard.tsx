@@ -1,4 +1,4 @@
-import { Navigate, NavLink, Outlet } from "react-router-dom";
+import { Navigate, NavLink, Outlet, useLocation } from "react-router-dom";
 import { useAuthStore } from "../store";
 import {
   Avatar,
@@ -25,10 +25,8 @@ import { useLogout } from "../hooks/useLogout";
 const { Header, Content, Footer, Sider } = Layout;
 
 const getMenuItems = (role: string) => {
+  // If we want to make sort these menu items in another form , so we can just put priority on every object , just before return we just sort based on priority
 
-
-  // If we want to make sort these menu items in another form , so we can just put priority on every object , just before return we just sort based on priority 
-  
   const baseItems = [
     {
       key: "/",
@@ -40,12 +38,6 @@ const getMenuItems = (role: string) => {
     //   icon: <UserOutlined />,
     //   label: <NavLink to="/users">Users</NavLink>,
     // },
-
-    {
-      key: "/restaurants",
-      icon: <Icon component={RestaurantsIcon} />,
-      label: <NavLink to="/restaurants">Restaurants</NavLink>,
-    },
 
     {
       key: "/products",
@@ -86,6 +78,11 @@ const getMenuItems = (role: string) => {
       icon: <UserOutlined />,
       label: <NavLink to="/users">Users</NavLink>,
     });
+    menu.splice(2, 0, {
+      key: "/restaurants",
+      icon: <Icon component={RestaurantsIcon} />,
+      label: <NavLink to="/restaurants">Restaurants</NavLink>,
+    });
 
     return menu;
   }
@@ -93,8 +90,8 @@ const getMenuItems = (role: string) => {
   return baseItems;
 };
 
-
 const Dashboard = () => {
+  const location = useLocation();
   const { logoutMutate } = useLogout();
 
   const { user } = useAuthStore();
@@ -105,15 +102,19 @@ const Dashboard = () => {
     token: { colorBgContainer },
   } = theme.useToken();
 
+  console.log("location 111111111111111111111111", location);
   // If user is not logged in , then redirect to login page
   if (user === null) {
-    return <Navigate to="/auth/login" replace={true} />;
+    return (
+      <Navigate
+        to={`/auth/login?returnTo=${location.pathname}`}
+        replace={true}
+      />
+    );
   }
 
   // Get the menu items based on the role of the user , also in above we just check user not to be null
   const items = getMenuItems(user.role);
-
-  console.log("items ::::::::::::::: ", items);
 
   return (
     <div>
@@ -130,7 +131,8 @@ const Dashboard = () => {
           </div>
           <Menu
             theme="light"
-            defaultSelectedKeys={["/"]}
+            // defaultSelectedKeys={["/"]}
+            defaultSelectedKeys={[location.pathname]}
             mode="inline"
             items={items}
           />
