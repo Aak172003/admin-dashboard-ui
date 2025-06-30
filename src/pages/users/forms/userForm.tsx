@@ -6,9 +6,9 @@ import type { TenantData } from "../../../types";
 const UserForm = () => {
   const { data: tenants } = useQuery({
     queryKey: ["tenants"],
-    queryFn: async () => {
-      const res = await getTenants();
-      return res.data;
+    queryFn: () => {
+      // TODO: make this dynamic, like search for tenants in the input
+      return getTenants(`perPage=100&currentPage=1`).then((res) => res.data);
     },
   });
 
@@ -110,7 +110,7 @@ const UserForm = () => {
                     placeholder="Select Restaurant"
                     onChange={() => {}}
                   >
-                    {tenants?.map((tenant: TenantData) => (
+                    {tenants?.data?.map((tenant: TenantData) => (
                       <Select.Option key={tenant.id} value={tenant.id}>
                         {tenant.name}
                       </Select.Option>
