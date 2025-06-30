@@ -135,7 +135,6 @@ const User = () => {
     placeholderData: keepPreviousData,
   });
 
-
   console.log("users data fetched", users);
 
   const { user } = useAuthStore();
@@ -267,6 +266,15 @@ const User = () => {
                   // perPage: pageSize || PER_PAGE,
                 };
               });
+            },
+            showTotal: (total: number, range: number[]) => {
+              console.log("total", total);
+              console.log("range", range);
+              return (
+                <Typography.Text>
+                  Showing {range[0]}-{range[1]} of {total} users
+                </Typography.Text>
+              );
             },
           }}
         />

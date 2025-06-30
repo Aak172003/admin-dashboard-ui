@@ -218,6 +218,15 @@ const Tenants = () => {
                 // perPage: pageSize || PER_PAGE,
               }));
             },
+            showTotal: (total: number, range: number[]) => {
+              console.log("total", total);
+              console.log("range", range);
+              return (
+                <Typography.Text>
+                  Showing {range[0]}-{range[1]} of {total} tenants
+                </Typography.Text>
+              );
+            },
           }}
         />
         <Drawer
