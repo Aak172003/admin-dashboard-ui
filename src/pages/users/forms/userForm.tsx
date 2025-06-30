@@ -6,11 +6,6 @@ import type { TenantData } from "../../../types";
 const UserForm = () => {
   const { data: tenants } = useQuery({
     queryKey: ["tenants"],
-    // queryFn: async () => {
-    //   const res = await getTenants();
-    //   return res.data;
-    // },
-
     queryFn: () => {
       // TODO: make this dynamic, like search for tenants in the input
       return getTenants(`perPage=100&currentPage=1`).then((res) => res.data);
