@@ -13,7 +13,7 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import Logo from "../../assets/icons/logo";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import type { Credentials } from "../../types";
-import { login, logout, self } from "../../http/api";
+import { login, self } from "../../http/api";
 import { useAuthStore } from "../../store";
 import { usePermission } from "../../hooks/usePermission";
 import { useLogout } from "../../hooks/useLogout";

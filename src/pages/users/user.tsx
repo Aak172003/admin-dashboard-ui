@@ -123,7 +123,6 @@ const User = () => {
 
         filteredParams as unknown as Record<string, string>
       ).toString();
-      console.log("queryString", queryString);
       const res = await getUsers(queryString);
 
       return res.data;
@@ -134,8 +133,6 @@ const User = () => {
     // If we use this , so we dont have loading state when we are navigating back and forth , but we get the isFetching state
     placeholderData: keepPreviousData,
   });
-
-  console.log("users data fetched", users);
 
   const { user } = useAuthStore();
 
@@ -151,7 +148,6 @@ const User = () => {
   }, []);
 
   const onFilterChange = (changedFields: FieldData[]) => {
-    console.log("changedFields", changedFields);
 
     const changeFilterFields = changedFields
       .map((item) => {
@@ -161,12 +157,9 @@ const User = () => {
       })
       .reduce((acc, curr) => ({ ...acc, ...curr }), {});
 
-    console.log("changeFields", changeFilterFields);
-
     if ("q" in changeFilterFields) {
       // Implement the debounce logic here
       // We will use the debounce function to delay the execution of the function , which is provided by loadash
-      console.log("debounceQUpdate", changeFilterFields.q);
       debounceQUpdate(changeFilterFields.q);
     } else {
       setQueryParams((prev) => ({
@@ -196,7 +189,6 @@ const User = () => {
   const onHandleSubmit = async () => {
     await form.validateFields();
     await userMutate(form.getFieldsValue());
-    console.log(form.getFieldsValue());
   };
 
   return (
@@ -251,9 +243,6 @@ const User = () => {
             pageSize: queryParams.perPage,
 
             onChange: (page, pageSize) => {
-              console.log("page", page);
-              console.log("pageSize", pageSize);
-
               // setQueryParams({
               //   currentPage: page,
               //   perPage: pageSize || PER_PAGE,
@@ -268,8 +257,6 @@ const User = () => {
               });
             },
             showTotal: (total: number, range: number[]) => {
-              console.log("total", total);
-              console.log("range", range);
               return (
                 <Typography.Text>
                   Showing {range[0]}-{range[1]} of {total} users
@@ -292,7 +279,6 @@ const User = () => {
           onClose={() => {
             form.resetFields();
             setIsDrawerOpen(false);
-            console.log("close");
           }}
           extra={
             <Space>
