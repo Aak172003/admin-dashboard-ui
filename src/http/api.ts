@@ -19,3 +19,6 @@ export const getTenants = (queryString: string) => api.get(`${ENDPOINT_TENANTS}?
 export const createUser = (user: CreateUser) => api.post(ENDPOINT_USERS, user)
 
 export const createTenant = (tenant: CreateTenant) => api.post(ENDPOINT_TENANTS, tenant)
+
+
+export const updateUser = (id: number, user: CreateUser) => api.patch(`${ENDPOINT_USERS}/${id}`, user)

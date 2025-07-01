@@ -1,0 +1,37 @@
+!! 
+In TypeScript, !! is the double negation operator. 
+It's used to explicitly convert a value to its boolean equivalent. Applying !! to any value will result in true if the value is truthy and false if it is falsy. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
