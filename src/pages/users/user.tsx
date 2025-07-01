@@ -88,6 +88,9 @@ const User = () => {
   const [form] = Form.useForm();
   const [filterForm] = Form.useForm();
 
+  // default value is null , means no user is selected
+  const [currentUser, setCurrentUser] = useState<UserData | null>(null);
+
   const queryClient = useQueryClient();
 
   // This is used to get the theme of the application
@@ -148,7 +151,6 @@ const User = () => {
   }, []);
 
   const onFilterChange = (changedFields: FieldData[]) => {
-
     const changeFilterFields = changedFields
       .map((item) => {
         return {
@@ -191,6 +193,7 @@ const User = () => {
     await userMutate(form.getFieldsValue());
   };
 
+  console.log("currentUser : currentUser : currentUser", currentUser);
   return (
     <>
       <Space direction="vertical" size="large" style={{ width: "100%" }}>
@@ -234,7 +237,27 @@ const User = () => {
         </Form>
 
         <Table
-          columns={columns}
+          columns={[
+            ...columns,
+            {
+              title: "Actions",
+              key: "actions",
+              render: (_: string, record: UserData) => {
+                console.log("record : record : record", record);
+                console.log(" -------------------------------- ", _);
+                return (
+                  <Button
+                    type="link"
+                    onClick={() => {
+                      setCurrentUser(record);
+                    }}
+                  >
+                    Edit
+                  </Button>
+                );
+              },
+            },
+          ]}
           dataSource={users?.data}
           rowKey={"id"}
           pagination={{
