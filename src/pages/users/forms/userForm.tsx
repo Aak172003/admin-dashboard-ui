@@ -4,6 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 import type { TenantData } from "../../../types";
 
 const UserForm = ({ isEditMode = false }: { isEditMode: boolean }) => {
+  const selectedRole = Form.useWatch("role");
+
+  console.log("selectedRole :::::::::::::::::::: ", selectedRole);
+
   const { data: tenants } = useQuery({
     queryKey: ["tenants"],
     queryFn: () => {
@@ -95,35 +99,38 @@ const UserForm = ({ isEditMode = false }: { isEditMode: boolean }) => {
                   >
                     <Select.Option value="admin">Admin</Select.Option>
                     <Select.Option value="manager">Manager</Select.Option>
-                    <Select.Option value="customer">Customer</Select.Option>
+                    {/* Customer will create through registration */}
+                    {/* <Select.Option value="customer">Customer</Select.Option> */}
                   </Select>
                 </Form.Item>
               </Col>
 
-              <Col span={12}>
-                <Form.Item
-                  label="Restaurant"
-                  name="tenantId"
-                  rules={[
-                    { required: true, message: "Restaurant is required" },
-                  ]}
-                >
-                  <Select
-                    id="selectTenantInUserForm"
-                    size="large"
-                    style={{ width: "100%" }}
-                    allowClear={true}
-                    placeholder="Select Restaurant"
-                    onChange={() => {}}
+              {selectedRole === "manager" && (
+                <Col span={12}>
+                  <Form.Item
+                    label="Restaurant"
+                    name="tenantId"
+                    rules={[
+                      { required: true, message: "Restaurant is required" },
+                    ]}
                   >
-                    {tenants?.data?.map((tenant: TenantData) => (
-                      <Select.Option key={tenant.id} value={tenant.id}>
-                        {tenant.name}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-              </Col>
+                    <Select
+                      id="selectTenantInUserForm"
+                      size="large"
+                      style={{ width: "100%" }}
+                      allowClear={true}
+                      placeholder="Select Restaurant"
+                      onChange={() => {}}
+                    >
+                      {tenants?.data?.map((tenant: TenantData) => (
+                        <Select.Option key={tenant.id} value={tenant.id}>
+                          {tenant.name}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                </Col>
+              )}
             </Row>
           </Card>
         </Space>
