@@ -23,7 +23,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { createUser, getUsers, updateUser } from "../../http/api";
+import { createUser, deleteUser, getUsers, updateUser } from "../../http/api";
 import { useAuthStore } from "../../store";
 import UserFilter from "./userFilter";
 import { useEffect, useMemo, useState } from "react";
@@ -210,27 +210,30 @@ const User = () => {
     },
   });
 
-  console.log("updateUserMutate :::::::::::::: ", updateUserMutate);
+  const { mutate: deleteUserMutate } = useMutation({
+    mutationKey: ["delete-users"],
+    mutationFn: async (id: number) => deleteUser(id).then((res) => res.data),
+    onSuccess: () => {
+      // after deleting the user , we need to invalidate the users query , so that we get the updated data
+      // and we dont have to wait for the data to be fetched from the server
+      // so that we can see the updated data immediately
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+  });
 
   const onHandleSubmit = async () => {
     const isEditMode = !!currentEditingUser;
-
-    console.log("isEditMode :::::::::::::: ", isEditMode);
 
     // This is for validation of the form
     await form.validateFields();
 
     if (isEditMode) {
-      console.log("editing ...............");
-
       await updateUserMutate(form.getFieldsValue());
       setCurrentUser(null);
     } else {
-      console.log("adding ...............");
       await userMutate(form.getFieldsValue());
       setCurrentUser(null);
     }
-
     form.resetFields();
     setIsDrawerOpen(false);
   };
@@ -246,7 +249,6 @@ const User = () => {
               { title: "Users" },
             ]}
           />
-
           {isFetching && (
             <Spin
               indicator={
@@ -284,8 +286,6 @@ const User = () => {
               title: "Actions",
               key: "actions",
               render: (_: string, record: UserData) => {
-                console.log("record : record : record", record);
-                console.log(" -------------------------------- ", _);
                 return (
                   <Button
                     type="link"
@@ -294,6 +294,22 @@ const User = () => {
                     }}
                   >
                     Edit
+                  </Button>
+                );
+              },
+            },
+            {
+              title: "Delete",
+              key: "delete",
+              render: (_: string, record: UserData) => {
+                return (
+                  <Button
+                    type="link"
+                    onClick={() => {
+                      deleteUserMutate(record.id);
+                    }}
+                  >
+                    Delete
                   </Button>
                 );
               },
