@@ -20,5 +20,6 @@ export const createUser = (user: CreateUser) => api.post(ENDPOINT_USERS, user)
 
 export const createTenant = (tenant: CreateTenant) => api.post(ENDPOINT_TENANTS, tenant)
 
+export const deleteUser = (id: number) => api.delete(`${ENDPOINT_USERS}/${id}`)
 
 export const updateUser = (id: number, user: CreateUser) => api.patch(`${ENDPOINT_USERS}/${id}`, user)
